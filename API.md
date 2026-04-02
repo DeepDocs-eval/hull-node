@@ -80,7 +80,7 @@ Rejecting or throwing this error without try/catch block will be treated as unha
 
 ```javascript
 function validationFunction() {
-  throw new LogicError("Validation error", { action: "validation", payload: });
+  throw new LogicError("Validation error", "validation", {});
 }
 ```
 
@@ -420,7 +420,7 @@ By default it's initiated inside `Hull.Connector` as a very simplistic in-memory
 The `queue` instance has a `contextMiddleware` method which adds `req.hull.enqueue` method to queue jobs - this is done automatically by `Hull.Connector().setupApp(app)`:
 
 ```javascript
-req.hull.enqueue((jobName = ''), (jobPayload = {}), (options = {}));
+req.hull.enqueue(jobName, jobPayload);
 ```
 
 By default the job will be retried 3 times and the payload would be removed from queue after successfull completion.
@@ -743,10 +743,10 @@ Every connector ServiceClient should apply it's own error handling strategy by o
 superagent.get("http://test/test")
   .use(superagentErrorPlugin())
   .ok((res) => {
-    if (res.status === 401) {
+      throw new ConfigurationError("Unauthorized", {});
       throw new ConfigurationError();
     }
-    if (res.status === 429) {
+      throw new RateLimitError("Rate limited", {});
       throw new RateLimitError();
     }
     return true;

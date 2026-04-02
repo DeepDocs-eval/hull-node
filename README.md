@@ -770,7 +770,7 @@ app.use("/smart-notifier-handler", smartNotifierHandler({
 
       });
 
-      return Promise.reject(new TransientError("Error message"));
+      return Promise.reject(new TransientError("Error message", {}));
     }
   }
 }));
@@ -797,7 +797,7 @@ app.use("/smart-notifier-handler", smartNotifierHandler({
   handlers: {
     "user:update": (ctx, messages) => {
       return (() => {
-        return Promise.reject(new LogicError("Validation error"));
+        return Promise.reject(new LogicError("Validation error", "validation", {}));
       })
       .catch((err) => {
         if (err.name === "LogicError") {
